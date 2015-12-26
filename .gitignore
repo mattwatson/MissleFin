@@ -70,6 +70,7 @@ publish
 [Bb]in
 [Oo]bj
 sql
+.vs
 TestResults
 *.[Cc]ache
 ClientBin
@@ -108,3 +109,4 @@ deploy/*
 
 *.svn
 .svn
+*.suo
