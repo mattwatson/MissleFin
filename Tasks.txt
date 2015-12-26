@@ -5,13 +5,17 @@ Rudementary Task List
 Phase 1
 
 Create initial Domain model (old F# Domain will get you most of the way)
-Create basic event processing loop (writing transaction log to file)
+Create basic event processing loop
+Add Packet at first sign of a dependency
+Add logging of what is going on, so we can inspect it later (don't want to have to be debugging)
 Create message for adding an account
+Writing transaction log to file as it comes in (some sort of serialization)
 Add Repository for Accounts
 Add Handler to deal with AddAccount message and add it to a repository
 Read existing Accounts in from xml and create messages for creating new ones
 Create query to get a list of all accounts
-Write code to load existing event log (and replay it into the event loop) (so you can migrate in, or re-play existing)
+Write code to load existing event log (and replay it into the event loop) 
+Now we can migrate in, or re-play existing log, create some automated harness to test?
 Wrap transaction log after every x entries.
 
 
@@ -26,6 +30,7 @@ Phase 3
 
 
 Eventually (optionally)
+Add FAKE build script?
 Create snapshot of entire database (with transaction Id of last transaction)
 Load database snapshot from file, and replay remaining transactions.
 

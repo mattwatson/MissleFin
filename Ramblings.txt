@@ -53,6 +53,18 @@ Problems
 * How do we defend against changes in messages that happen after the event log has been written? 
   Migration path for converting old messages in file into new one each time a breaking change is made?
 
+* Need to consider failure at all times with all commands and queries
 
 Ideas
 Databases could include some pre-aggregation, but I doubt this is necessary for the first stages.
+
+
+Reference materials
+structuring an F# project       http://fsharpforfunandprofit.com/posts/recipe-part3/
+   Put things in dependency order (enforced by F# anyway)
+   Create a shared module for core types that can be shared everywhere
+   Create modules for areas of the code (e.g. database, valadation might be seperate modules)
+   Make types that are only used inside a module private
+   Make modules to work with types, and call them the same name as the types if appropriate
+Hexagonal Architecture          http://alistair.cockburn.us/Hexagonal+architecture
+Onion Architecture              http://jeffreypalermo.com/blog/the-onion-architecture-part-1/
