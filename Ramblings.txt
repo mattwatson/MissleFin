@@ -1,0 +1,58 @@
+
+Aim is to completely replace existing Akcounts software
+
+Features
+- Model Accounts I have
+   Store information about accounts. e.g. notes, interest rate, and limit
+- Record data of transfer of money between accounts
+- Persistence of this data
+- View entries by account (including multiple at the same time)
+- View transactions that match criteria (e.g. all unverified between a timeframe)
+- Define reports that can be run (like the existing excel spreadsheets)
+   cashflows
+   balances
+   savings rate per month year etc.
+- Maybe email these reports
+- Have a dashboard to show the state of the accounts
+- Show if any accounts are due to breach limits that have been set
+- Perhaps do some forecasting based on expected return
+- Automate as much as possible
+   Allow copying of existing Journals
+   Have little tools to create amortised transactions (which are defined as such, and their payments automatically created)
+
+
+
+Approach
+Start with a domain
+Build a service layer around that which could be hosted internally, or remotely
+Have a proper server which runs 24/7, deployed somewhere.
+Build a client that can interact with that, perhaps in web app, mobile app, or new desktop app.
+
+Follow a CQRS/Event sourcing approach. 
+   All events are immidiately written to an event store (start off by writing my own implementation)
+   Then they are acted upon
+   The whole domain is in memory all the time
+
+All domain items are simple immutable types
+Every change to the data is done via an event, which is as small of a transaction as possible.
+   Adding/Editing/Remove a new Account, Journal, Entry is all an event
+
+We can save a snapshot of the entire database, and load it to save replaying the transction log every time, but this is not essential at first
+Transaction log is cool because it enables a full history of events, and maybe the ability to rollback any edits if something goes wrong.
+
+Need to write a transaction engine and a thing that calls it with the existing data to create the initial transaction log.
+
+Queries return something (immutatble) that may be finished, or potentially take time to caluculate, and report progress and stream results.
+
+Everything will be gloriously immutable except for the repositories which are only accessable from within the system in the transaction processor.
+
+Problems
+* How to propegate updates. Perhaps the repositories can be publishing a stream of updates that can be relayed to anyone who is interested. 
+  This could be a RxStream or some pub/sub messaging system.
+
+* How do we defend against changes in messages that happen after the event log has been written? 
+  Migration path for converting old messages in file into new one each time a breaking change is made?
+
+
+Ideas
+Databases could include some pre-aggregation, but I doubt this is necessary for the first stages.
